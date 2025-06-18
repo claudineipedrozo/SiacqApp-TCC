@@ -5,10 +5,13 @@ Este repositório contém o código-fonte do trabalho de conclusão de curso com
 # Tecnologias Utilizadas
 Este projeto foi desenvolvido utilizando as seguintes tecnologias:
 
-Linguagem de Programação: TypeScript
-Framework Mobile: React Native
+Linguagem de Programação: 
+TypeScript
+Framework Mobile: 
+React Native
 Expo (para simplificar o desenvolvimento e testes)
-Ferramentas de Gerenciamento de Pacotes: npm
+Ferramentas de Gerenciamento de Pacotes: 
+npm
 
 # Instrução de Instalação
 

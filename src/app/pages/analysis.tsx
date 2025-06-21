@@ -7,16 +7,15 @@ import { useRouter } from "expo-router";
 import { styles } from "../../styles";
 
 
-
-export default function CollectDetail() {
+export default function AnalysisDetail() {
   const [photos, setPhotos] = React.useState<string[]>([]);
 
   const router = useRouter();
 
   const takePhoto = async () => {
 
-    if(photos.length >=4) {
-      Alert.alert("Você já adicionou 4 fotos!")
+    if(photos.length >=5) {
+      Alert.alert("Você já adicionou 5 fotos!")
       return;
     }
 
@@ -36,9 +35,24 @@ export default function CollectDetail() {
     }
   };
 
-  const finalizarColeta = () => {
-    router.push({ pathname: "./initialPage", params: { finalizadaId: "08679" } })
-  }
+  const finalizarAnalise = () => {
+  Alert.alert(
+    "Finalizar Análise",
+    "Tem certeza que deseja finalizar esta análise?",
+    [
+      { text: "Cancelar", style: "cancel" },
+      {
+        text: "Sim",
+        onPress: () => {
+          router.replace({
+            pathname: "../screens/analysis",
+            params: { analiseFinalizadaId: "08679" },  // Passe o id da análise finalizada
+          });
+        },
+      },
+    ]
+  );
+};
 
   return (
     <View style={styles.container}>
@@ -48,7 +62,7 @@ export default function CollectDetail() {
       <Text>Manancial: Rio Aquidauana</Text>
 
       <TextInput
-        label={"Residual de Cloro"}
+        label={"Cor"}
         mode="outlined"
         theme={{ colors: { primary: "#1E90FF" } }}
       />
@@ -65,6 +79,18 @@ export default function CollectDetail() {
         theme={{ colors: { primary: "#1E90FF" } }}
       />
 
+       <TextInput
+        label={"Turbidez"}
+        mode="outlined"
+        theme={{ colors: { primary: "#1E90FF" } }}
+      />
+
+       <TextInput
+        label={"Coliformes"}
+        mode="outlined"
+        theme={{ colors: { primary: "#1E90FF" } }}
+      />
+
       <Button title="Tirar Foto" onPress={takePhoto} />
       <FlatList
         data={photos}
@@ -76,9 +102,9 @@ export default function CollectDetail() {
           style={{width: 160, height: 160, marginRight: 10, marginBottom: 10, padding: 50, 
             borderRadius: 8, borderWidth: 1, borderColor: '#ccc'}} />
         )}
-        ListEmptyComponent={<Text style={{ marginTop: 10 }}>Nenhuma foto ainda.</Text>} /> 
+        ListEmptyComponent={<Text style={{ marginTop: 10 }}>Nenhuma foto registrada.</Text>} /> 
 
-        <Button title="Finalizar Coleta" onPress={() => router.replace("./initialPage")} /> 
+        <Button title="Finalizar Análise" onPress={finalizarAnalise} /> 
     </View>
   );
 }

@@ -35,9 +35,9 @@ export const styles = StyleSheet.create({
       marginTop: 80,
       width: 250,
       height: 44,
-      alignSelf: "center",
-      
+      alignSelf: "center",      
       borderRadius: 8,
+      marginBottom: 36,
     },
     buttonLabel: {
       fontSize: 16, 

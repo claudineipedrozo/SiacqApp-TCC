@@ -19,7 +19,7 @@ export default function Index() {
       return;
     }
     
-    router.navigate("../pages") }
+    router.navigate("../screens") }
 
   return (
     <View style={styles.container}>

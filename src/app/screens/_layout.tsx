@@ -56,7 +56,7 @@ export default function Layout() {
         />
 
         <Drawer.Screen
-          name="collect"
+          name="collectList"
           options={{
             drawerLabel: "Coletas",
             drawerIcon: () => (
@@ -70,7 +70,7 @@ export default function Layout() {
         />
 
         <Drawer.Screen
-          name="analysis"
+          name="analysisList"
           options={{
             drawerLabel: "Análises",
             drawerIcon: () => (

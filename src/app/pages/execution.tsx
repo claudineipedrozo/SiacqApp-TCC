@@ -1,20 +1,52 @@
 import * as React from "react";
-import { View, Text, Button, Alert, Image, FlatList } from "react-native";
-import { TextInput } from "react-native-paper";
+import { View, Text, Alert, Image, FlatList, TouchableOpacity } from "react-native";
+import { TextInput, RadioButton, Checkbox } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter, useLocalSearchParams } from "expo-router";
 
-import { styles } from "../../styles";
+import { styles } from "../../styles/execution.styles";
+import { globalStyles } from "../../styles/globalStyles";
 
 export default function Execution() {
   const [photos, setPhotos] = React.useState<string[]>([]);
+  const [residualCloro, setResidualCloro] = React.useState("");
+  const [ph, setPh] = React.useState("");
+  const [temperatura, setTemperatura] = React.useState("");
+  const [chuva, setChuva] = React.useState<string>("");
+
+  const [parametrosSelecionados, setParametrosSelecionados] = React.useState<string[]>([]);
 
   const router = useRouter();
-  const { id, finalizadas } = useLocalSearchParams<{ id: string; finalizadas?: string }>();
+
+  const params = useLocalSearchParams<{
+    id: string;
+    numero: string;
+    local: string;
+    endereco: string;
+    pontoColeta: string;
+    manancial: string;    
+    finalizadas?: string;
+  }>();
+
+  const coletaAtualId = params.id;
+  const coletaNumero = params.numero;
+  const coletaLocal = params.local;
+  const coletaEndereco = params.endereco;
+  const coletaPontoColeta = params.pontoColeta;
+  const coletaManancial = params.manancial;
+  const finalizadasAnteriores = params.finalizadas ? params.finalizadas.split(",") : [];
+
+  const toggleParametro = (value: string) => {
+    setParametrosSelecionados((prev) =>
+      prev.includes(value)
+        ? prev.filter((item) => item !== value)
+        : [...prev, value]
+    );
+  };
 
   const takePhoto = async () => {
     if (photos.length >= 4) {
-      Alert.alert("Você já adicionou 4 fotos!");
+      Alert.alert("Limite atingido", "Você só pode adicionar até 4 fotos.");
       return;
     }
 
@@ -35,69 +67,129 @@ export default function Execution() {
   };
 
   const finalizarColeta = () => {
-    // Pega a lista de IDs finalizados anteriores
-    const idsAnteriores = finalizadas ? finalizadas.split(",") : [];
+    console.log("Parâmetros selecionados:", parametrosSelecionados);
 
-    // Adiciona o ID atual, mas evitando duplicatas
-    const novasFinalizadas = Array.from(new Set([...idsAnteriores, id]));
+    const novasFinalizadas = Array.from(new Set([...finalizadasAnteriores, coletaAtualId]));
 
-    // Navega de volta para a lista, passando a nova lista de finalizadas
     router.replace({
-      pathname: "../screens/collect",
+      pathname: "../screens/collectList",
       params: { finalizadas: novasFinalizadas.join(",") },
     });
   };
 
   return (
-    <View style={styles.container}>
-      <Text>Coleta nº {id}</Text>
-      <Text>Endereço: Antonio Nogueira, 1645</Text>
-      <Text>Cidade/Distrito: Aquidauana - MS</Text>
-      <Text>Manancial: Rio Aquidauana</Text>
+    <View style={globalStyles.container}>
+      <Text style={styles.labelText}>Coleta nº {coletaNumero}</Text>
+      <Text>Local: {coletaLocal}</Text>
+      <Text>Endereço: {coletaEndereco}</Text>
+      <Text>Ponto de Coleta: {coletaPontoColeta}</Text>
+      <Text>Manancial: {coletaManancial}</Text>
 
+      {/* ✅ Checkboxes */}
+      <View style={{ marginTop: 16 }}>
+        <Text style={{ fontWeight: "bold", marginBottom: 8 }}>Parâmetros Analisados:</Text>
+
+        <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+          {["Microbiológica", "Fisico-Química", "Cromatográfica", "Hidrobiológica"].map((item) => (
+            <View
+              key={item}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginRight: 20,
+                marginBottom: 5,
+              }}
+            >
+              <Checkbox
+                status={parametrosSelecionados.includes(item) ? "checked" : "unchecked"}
+                onPress={() => toggleParametro(item)}
+              />
+              <Text>{item}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+
+      {/* ✅ Radio Buttons da Chuva */}
+      <View style={{ padding: 12 }}>
+        <Text style={{ fontSize: 16, marginBottom: 8, fontWeight: "bold" }}>
+          Chuva nas últimas 24h?
+        </Text>
+
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
+          <TouchableOpacity
+            style={{ flexDirection: "row", alignItems: "center", marginRight: 10 }}
+            onPress={() => setChuva("sim")}
+          >
+            <RadioButton
+              value="sim"
+              status={chuva === "sim" ? "checked" : "unchecked"}
+              onPress={() => setChuva("sim")}
+            />
+            <Text style={{ fontSize: 16, fontWeight: "bold" }}>Sim</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{ flexDirection: "row", alignItems: "center" }}
+            onPress={() => setChuva("nao")}
+          >
+            <RadioButton
+              value="nao"
+              status={chuva === "nao" ? "checked" : "unchecked"}
+              onPress={() => setChuva("nao")}
+            />
+            <Text style={{ fontSize: 16, fontWeight: "bold" }}>Não</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* ✅ Inputs de execução das coletas */}    
       <TextInput
-        label={"Residual de Cloro"}
+        label="Residual de Cloro"
+        value={residualCloro}
+        onChangeText={setResidualCloro}
         mode="outlined"
         theme={{ colors: { primary: "#1E90FF" } }}
+        style={{ marginTop: 6, height: 48 }}
+        contentStyle={{height: 30, paddingVertical: 4}}
       />
 
       <TextInput
-        label={"pH"}
+        label="pH"
+        value={ph}
+        onChangeText={setPh}
         mode="outlined"
         theme={{ colors: { primary: "#1E90FF" } }}
+        style={{ marginTop: 6, height: 48 }}
+        contentStyle={{height: 30, paddingVertical: 4}}
       />
 
       <TextInput
-        label={"Temperatura"}
+        label="Temperatura"
+        value={temperatura}
+        onChangeText={setTemperatura}
         mode="outlined"
         theme={{ colors: { primary: "#1E90FF" } }}
+        style={{ marginTop: 6, height: 48 }}
+        contentStyle={{height: 30, paddingVertical: 4}}
       />
 
-      <Button title="Tirar Foto" onPress={takePhoto} />
+      <TouchableOpacity onPress={takePhoto} style={styles.photoButton}>
+        <Text style={styles.buttonText}>Tirar Foto</Text>
+      </TouchableOpacity>
 
       <FlatList
         data={photos}
         keyExtractor={(item, index) => `${item}-${index}`}
         numColumns={2}
-        style={{ marginTop: 10 }}
-        renderItem={({ item }) => (
-          <Image
-            source={{ uri: item }}
-            style={{
-              width: 160,
-              height: 160,
-              marginRight: 10,
-              marginBottom: 10,
-              borderRadius: 8,
-              borderWidth: 1,
-              borderColor: "#ccc",
-            }}
-          />
-        )}
-        ListEmptyComponent={<Text style={{ marginTop: 10 }}>Nenhuma foto ainda.</Text>}
+        contentContainerStyle={styles.photoContainer}
+        renderItem={({ item }) => <Image source={{ uri: item }} style={styles.photo} />}
+        ListEmptyComponent={<Text style={styles.noPhotoText}>Nenhuma foto adicionada ainda.</Text>}
       />
 
-      <Button title="Finalizar Coleta" onPress={finalizarColeta} />
+      <TouchableOpacity onPress={finalizarColeta} style={styles.finalizeButton}>
+        <Text style={styles.buttonText}>Finalizar Coleta</Text>
+      </TouchableOpacity>
     </View>
   );
 }

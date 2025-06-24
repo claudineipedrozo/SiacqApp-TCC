@@ -1,21 +1,32 @@
 import * as React from "react";
-import { View, Text, Button, Alert, Image, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  Alert,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import { TextInput } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
-import { useRouter } from "expo-router";
+import { useRouter, useLocalSearchParams } from "expo-router";
 
-import { styles } from "../../styles";
+import { styles } from "../../styles/analysis.styles";
+import { globalStyles } from "../../styles/globalStyles";
 
-
-export default function AnalysisDetail() {
+export default function Analysis() {
   const [photos, setPhotos] = React.useState<string[]>([]);
+  const [isSaving, setIsSaving] = React.useState(false);
 
   const router = useRouter();
 
-  const takePhoto = async () => {
+  // *** Aqui pegamos o id da análise passada via params ***
+  const { id } = useLocalSearchParams<{ id: string }>();
 
-    if(photos.length >=5) {
-      Alert.alert("Você já adicionou 5 fotos!")
+  const takePhoto = async () => {
+    if (photos.length >= 5) {
+      Alert.alert("Você já adicionou 5 fotos!");
       return;
     }
 
@@ -36,77 +47,73 @@ export default function AnalysisDetail() {
   };
 
   const finalizarAnalise = () => {
-  Alert.alert(
-    "Finalizar Análise",
-    "Tem certeza que deseja finalizar esta análise?",
-    [
-      { text: "Cancelar", style: "cancel" },
-      {
-        text: "Sim",
-        onPress: () => {
-          router.replace({
-            pathname: "../screens/analysis",
-            params: { analiseFinalizadaId: "08679" },  // Passe o id da análise finalizada
-          });
+    Alert.alert(
+      "Finalizar Análise",
+      "Tem certeza que deseja finalizar esta análise?",
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Sim",
+          onPress: () => {
+            setIsSaving(true);
+
+            setTimeout(() => {
+              setIsSaving(false);
+
+              // *** Passa o id da análise finalizada para a lista ***
+              router.replace({
+                pathname: "../screens/analysisList",
+                params: { finalizadaId: id },
+              });
+            }, 2000);
+          },
         },
-      },
-    ]
-  );
-};
+      ]
+    );
+  };
+
+  if (isSaving) {
+    return (
+      <View style={globalStyles.centered}>
+        <ActivityIndicator size="large" color="#1E90FF" />
+        <Text style={{ marginTop: 12, fontSize: 16, color: "#1E90FF" }}>
+          Salvando análise...
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
-      <Text>Coleta nº 08679</Text>
-      <Text>Endereço: Antonio Nogueira, 1645</Text>
-      <Text>Cidade/ Distrito: Aquidauana - MS</Text>
-      <Text>Manancial: Rio Aquidauana</Text>
+      {/* Exemplo de exibição de dados */}
+      <Text style={styles.infoText}>Coleta nº {id}</Text>
+      {/* Campos de entrada */}
+      {["Cor", "pH", "Temperatura", "Turbidez", "Coliformes"].map((label) => (
+        <TextInput
+          key={label}
+          label={label}
+          mode="outlined"
+          theme={{ colors: { primary: "#1E90FF" } }}
+          style={styles.textInput}
+        />
+      ))}
 
-      <TextInput
-        label={"Cor"}
-        mode="outlined"
-        theme={{ colors: { primary: "#1E90FF" } }}
-      />
+      <TouchableOpacity onPress={takePhoto} style={styles.photoButton}>
+        <Text style={styles.buttonText}>Tirar Foto</Text>
+      </TouchableOpacity>
 
-      <TextInput
-        label={"pH"}
-        mode="outlined"
-        theme={{ colors: { primary: "#1E90FF" } }}
-      />
-
-      <TextInput
-        label={"Temperatura"}
-        mode="outlined"
-        theme={{ colors: { primary: "#1E90FF" } }}
-      />
-
-       <TextInput
-        label={"Turbidez"}
-        mode="outlined"
-        theme={{ colors: { primary: "#1E90FF" } }}
-      />
-
-       <TextInput
-        label={"Coliformes"}
-        mode="outlined"
-        theme={{ colors: { primary: "#1E90FF" } }}
-      />
-
-      <Button title="Tirar Foto" onPress={takePhoto} />
       <FlatList
         data={photos}
         keyExtractor={(item, index) => `${item}-${index}`}
         numColumns={2}
-        style={{ marginTop: 10 }}
-        renderItem={({ item }) => (
-          <Image source={{ uri: item }} 
-          style={{width: 160, height: 160, marginRight: 10, marginBottom: 10, padding: 50, 
-            borderRadius: 8, borderWidth: 1, borderColor: '#ccc'}} />
-        )}
-        ListEmptyComponent={<Text style={{ marginTop: 10 }}>Nenhuma foto registrada.</Text>} /> 
+        contentContainerStyle={styles.photoList}
+        renderItem={({ item }) => <Image source={{ uri: item }} style={styles.photo} />}
+        ListEmptyComponent={<Text style={styles.noPhotoText}>Nenhuma foto registrada.</Text>}
+      />
 
-        <Button title="Finalizar Análise" onPress={finalizarAnalise} /> 
+      <TouchableOpacity onPress={finalizarAnalise} style={styles.finalizeButton}>
+        <Text style={styles.buttonText}>Finalizar Análise</Text>
+      </TouchableOpacity>
     </View>
   );
 }
-
-

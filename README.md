@@ -50,12 +50,3 @@ Para testar em um emulador/simulador:
 Se você tiver um emulador Android configurado no Android Studio e rodando, pressione a no terminal onde o Expo está rodando.
 Se você tiver um simulador iOS configurado no Xcode (apenas em macOS) e rodando, pressione i no terminal onde o Expo está rodando.
 
-## Observação sobre o formulário de Nova Coleta
-
-O formulário de criação de coletas não é mais uma rota navegável. Ele foi movido para um componente modal e agora está localizado em `src/components/collectCreate.tsx`.
-
-Como usar:
-- O botão "Nova Coleta" na tela inicial abre o formulário como um modal (fora do sistema de rotas do Expo Router).
-- O arquivo `src/app/screens/collectCreate.tsx` foi removido da navegação para evitar acesso direto pela URL.
-
-Quando quiser torná-lo acessível por rota novamente, basta recriar o arquivo de tela em `src/app/screens` que importe e use o componente.

@@ -1,6 +1,7 @@
 import * as React from "react";
-import { View, Text, Alert, Image, FlatList, TouchableOpacity } from "react-native";
-import { TextInput, RadioButton, Checkbox } from "react-native-paper";
+import { View, Text, Alert, Image, FlatList, TouchableOpacity, ScrollView } from "react-native";
+import { TextInput, RadioButton, Checkbox, Card, Divider } from "react-native-paper";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter, useLocalSearchParams } from "expo-router";
 
@@ -78,118 +79,170 @@ export default function Execution() {
   };
 
   return (
-    <View style={globalStyles.container}>
-      <Text style={styles.labelText}>Coleta nº {coletaNumero}</Text>
-      <Text>Local: {coletaLocal}</Text>
-      <Text>Endereço: {coletaEndereco}</Text>
-      <Text>Ponto de Coleta: {coletaPontoColeta}</Text>
-      <Text>Manancial: {coletaManancial}</Text>
+    <ScrollView 
+      style={globalStyles.container}
+      contentContainerStyle={styles.scrollContent}
+      showsVerticalScrollIndicator={false}
+    >
+      {/* Card de Informações da Coleta */}
+      <Card style={styles.infoCard} elevation={2}>
+        <Card.Content>
+          <View style={styles.infoHeader}>
+            <MaterialCommunityIcons name="water-pump" size={28} color="#1E90FF" />
+            <Text style={styles.coletaTitle}>Coleta nº {coletaNumero}</Text>
+          </View>
+          <Divider style={styles.divider} />
+          <View style={styles.infoRow}>
+            <MaterialCommunityIcons name="map-marker" size={18} color="#666" />
+            <Text style={styles.infoText}>{coletaLocal}</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <MaterialCommunityIcons name="road" size={18} color="#666" />
+            <Text style={styles.infoText}>{coletaEndereco}</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <MaterialCommunityIcons name="map-marker-radius" size={18} color="#666" />
+            <Text style={styles.infoText}>Ponto: {coletaPontoColeta}</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <MaterialCommunityIcons name="water" size={18} color="#666" />
+            <Text style={styles.infoText}>{coletaManancial}</Text>
+          </View>
+        </Card.Content>
+      </Card>
 
-      {/* ✅ Checkboxes */}
-      <View style={{ marginTop: 16 }}>
-        <Text style={{ fontWeight: "bold", marginBottom: 8 }}>Parâmetros Analisados:</Text>
-
-        <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-          {["Microbiológica", "Fisico-Química", "Cromatográfica", "Hidrobiológica"].map((item) => (
-            <View
-              key={item}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginRight: 20,
-                marginBottom: 5,
-              }}
-            >
-              <Checkbox
-                status={parametrosSelecionados.includes(item) ? "checked" : "unchecked"}
+      {/* Parâmetros Analisados */}
+      <Card style={styles.sectionCard} elevation={1}>
+        <Card.Content>
+          <Text style={styles.sectionTitle}>Parâmetros Analisados</Text>
+          <View style={styles.checkboxContainer}>
+            {["Microbiológica", "Fisico-Química", "Cromatográfica", "Hidrobiológica"].map((item) => (
+              <TouchableOpacity
+                key={item}
+                style={styles.checkboxItem}
                 onPress={() => toggleParametro(item)}
-              />
-              <Text>{item}</Text>
-            </View>
-          ))}
-        </View>
-      </View>
+              >
+                <Checkbox
+                  status={parametrosSelecionados.includes(item) ? "checked" : "unchecked"}
+                  onPress={() => toggleParametro(item)}
+                />
+                <Text style={styles.checkboxLabel}>{item}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </Card.Content>
+      </Card>
 
-      {/* ✅ Radio Buttons da Chuva */}
-      <View style={{ padding: 12 }}>
-        <Text style={{ fontSize: 16, marginBottom: 8, fontWeight: "bold" }}>
-          Chuva nas últimas 24h?
-        </Text>
-
-        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
-          <TouchableOpacity
-            style={{ flexDirection: "row", alignItems: "center", marginRight: 10 }}
-            onPress={() => setChuva("sim")}
-          >
-            <RadioButton
-              value="sim"
-              status={chuva === "sim" ? "checked" : "unchecked"}
+      {/* Chuva nas últimas 24h */}
+      <Card style={styles.sectionCard} elevation={1}>
+        <Card.Content>
+          <Text style={styles.sectionTitle}>Chuva nas últimas 24h?</Text>
+          <View style={styles.radioContainer}>
+            <TouchableOpacity
+              style={styles.radioItem}
               onPress={() => setChuva("sim")}
-            />
-            <Text style={{ fontSize: 16, fontWeight: "bold" }}>Sim</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{ flexDirection: "row", alignItems: "center" }}
-            onPress={() => setChuva("nao")}
-          >
-            <RadioButton
-              value="nao"
-              status={chuva === "nao" ? "checked" : "unchecked"}
+            >
+              <RadioButton
+                value="sim"
+                status={chuva === "sim" ? "checked" : "unchecked"}
+                onPress={() => setChuva("sim")}
+              />
+              <Text style={styles.radioLabel}>Sim</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.radioItem}
               onPress={() => setChuva("nao")}
-            />
-            <Text style={{ fontSize: 16, fontWeight: "bold" }}>Não</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+            >
+              <RadioButton
+                value="nao"
+                status={chuva === "nao" ? "checked" : "unchecked"}
+                onPress={() => setChuva("nao")}
+              />
+              <Text style={styles.radioLabel}>Não</Text>
+            </TouchableOpacity>
+          </View>
+        </Card.Content>
+      </Card>
 
-      {/* ✅ Inputs de execução das coletas */}    
-      <TextInput
-        label="Residual de Cloro"
-        value={residualCloro}
-        onChangeText={setResidualCloro}
-        mode="outlined"
-        theme={{ colors: { primary: "#1E90FF" } }}
-        style={{ marginTop: 6, height: 48 }}
-        contentStyle={{height: 30, paddingVertical: 4}}
-      />
+      {/* Medições */}
+      <Card style={styles.sectionCard} elevation={1}>
+        <Card.Content>
+          <Text style={styles.sectionTitle}>Medições</Text>
+          <TextInput
+            label="Residual de Cloro"
+            value={residualCloro}
+            onChangeText={setResidualCloro}
+            mode="outlined"
+            theme={{ colors: { primary: "#1E90FF" } }}
+            style={styles.input}
+            left={<TextInput.Icon icon="water" />}
+          />
+          <TextInput
+            label="pH"
+            value={ph}
+            onChangeText={setPh}
+            mode="outlined"
+            theme={{ colors: { primary: "#1E90FF" } }}
+            style={styles.input}
+            left={<TextInput.Icon icon="chart-line" />}
+          />
+          <TextInput
+            label="Temperatura (°C)"
+            value={temperatura}
+            onChangeText={setTemperatura}
+            mode="outlined"
+            theme={{ colors: { primary: "#1E90FF" } }}
+            style={styles.input}
+            left={<TextInput.Icon icon="thermometer" />}
+            keyboardType="numeric"
+          />
+        </Card.Content>
+      </Card>
 
-      <TextInput
-        label="pH"
-        value={ph}
-        onChangeText={setPh}
-        mode="outlined"
-        theme={{ colors: { primary: "#1E90FF" } }}
-        style={{ marginTop: 6, height: 48 }}
-        contentStyle={{height: 30, paddingVertical: 4}}
-      />
+      {/* Fotos */}
+      <Card style={styles.sectionCard} elevation={1}>
+        <Card.Content>
+          <View style={styles.photoHeader}>
+            <Text style={styles.sectionTitle}>Fotos ({photos.length}/4)</Text>
+            {photos.length < 4 && (
+              <TouchableOpacity onPress={takePhoto} style={styles.photoButtonSmall}>
+                <MaterialCommunityIcons name="camera" size={20} color="#1E90FF" />
+                <Text style={styles.photoButtonText}>Adicionar</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          {photos.length > 0 ? (
+            <View style={styles.photoGrid}>
+              {photos.map((photo, index) => (
+                <View key={`${photo}-${index}`} style={styles.photoWrapper}>
+                  <Image source={{ uri: photo }} style={styles.photo} />
+                  <TouchableOpacity
+                    style={styles.removePhotoButton}
+                    onPress={() => setPhotos(photos.filter((_, i) => i !== index))}
+                  >
+                    <MaterialCommunityIcons name="close-circle" size={24} color="#ff4444" />
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+          ) : (
+            <View style={styles.emptyPhotoContainer}>
+              <MaterialCommunityIcons name="camera-off" size={48} color="#ccc" />
+              <Text style={styles.noPhotoText}>Nenhuma foto adicionada ainda</Text>
+              <TouchableOpacity onPress={takePhoto} style={styles.photoButton}>
+                <MaterialCommunityIcons name="camera" size={20} color="#fff" />
+                <Text style={styles.buttonText}>Tirar Foto</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </Card.Content>
+      </Card>
 
-      <TextInput
-        label="Temperatura"
-        value={temperatura}
-        onChangeText={setTemperatura}
-        mode="outlined"
-        theme={{ colors: { primary: "#1E90FF" } }}
-        style={{ marginTop: 6, height: 48 }}
-        contentStyle={{height: 30, paddingVertical: 4}}
-      />
-
-      <TouchableOpacity onPress={takePhoto} style={styles.photoButton}>
-        <Text style={styles.buttonText}>Tirar Foto</Text>
-      </TouchableOpacity>
-
-      <FlatList
-        data={photos}
-        keyExtractor={(item, index) => `${item}-${index}`}
-        numColumns={2}
-        contentContainerStyle={styles.photoContainer}
-        renderItem={({ item }) => <Image source={{ uri: item }} style={styles.photo} />}
-        ListEmptyComponent={<Text style={styles.noPhotoText}>Nenhuma foto adicionada ainda.</Text>}
-      />
-
+      {/* Botão Finalizar */}
       <TouchableOpacity onPress={finalizarColeta} style={styles.finalizeButton}>
+        <MaterialCommunityIcons name="check-circle" size={24} color="#fff" />
         <Text style={styles.buttonText}>Finalizar Coleta</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }

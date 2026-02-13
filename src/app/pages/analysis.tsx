@@ -7,8 +7,10 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
-import { TextInput } from "react-native-paper";
+import { TextInput, Card, Divider } from "react-native-paper";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter, useLocalSearchParams } from "expo-router";
 
@@ -83,37 +85,92 @@ export default function Analysis() {
     );
   }
 
+  const analysisFields = [
+    { label: "Cor", icon: "palette", unit: "" },
+    { label: "pH", icon: "chart-line", unit: "" },
+    { label: "Temperatura", icon: "thermometer", unit: "°C" },
+    { label: "Turbidez", icon: "water", unit: "NTU" },
+    { label: "Coliformes", icon: "bacteria", unit: "NMP/100mL" },
+  ];
+
   return (
-    <View style={styles.container}>
-      {/* Exemplo de exibição de dados */}
-      <Text style={styles.infoText}>Coleta nº {id}</Text>
-      {/* Campos de entrada */}
-      {["Cor", "pH", "Temperatura", "Turbidez", "Coliformes"].map((label) => (
-        <TextInput
-          key={label}
-          label={label}
-          mode="outlined"
-          theme={{ colors: { primary: "#1E90FF" } }}
-          style={styles.textInput}
-        />
-      ))}
+    <ScrollView 
+      style={styles.container}
+      contentContainerStyle={styles.scrollContent}
+      showsVerticalScrollIndicator={false}
+    >
+      {/* Card de Informações */}
+      <Card style={styles.infoCard} elevation={2}>
+        <Card.Content>
+          <View style={styles.infoHeader}>
+            <MaterialCommunityIcons name="test-tube" size={28} color="#1E90FF" />
+            <Text style={styles.coletaTitle}>Análise - Coleta nº {id}</Text>
+          </View>
+        </Card.Content>
+      </Card>
 
-      <TouchableOpacity onPress={takePhoto} style={styles.photoButton}>
-        <Text style={styles.buttonText}>Tirar Foto</Text>
-      </TouchableOpacity>
+      {/* Campos de Análise */}
+      <Card style={styles.sectionCard} elevation={1}>
+        <Card.Content>
+          <Text style={styles.sectionTitle}>Resultados da Análise</Text>
+          {analysisFields.map((field) => (
+            <TextInput
+              key={field.label}
+              label={`${field.label}${field.unit ? ` (${field.unit})` : ""}`}
+              mode="outlined"
+              theme={{ colors: { primary: "#1E90FF" } }}
+              style={styles.input}
+              left={<TextInput.Icon icon={field.icon} />}
+              keyboardType={field.label === "Coliformes" ? "numeric" : "default"}
+            />
+          ))}
+        </Card.Content>
+      </Card>
 
-      <FlatList
-        data={photos}
-        keyExtractor={(item, index) => `${item}-${index}`}
-        numColumns={2}
-        contentContainerStyle={styles.photoList}
-        renderItem={({ item }) => <Image source={{ uri: item }} style={styles.photo} />}
-        ListEmptyComponent={<Text style={styles.noPhotoText}>Nenhuma foto registrada.</Text>}
-      />
+      {/* Fotos */}
+      <Card style={styles.sectionCard} elevation={1}>
+        <Card.Content>
+          <View style={styles.photoHeader}>
+            <Text style={styles.sectionTitle}>Fotos ({photos.length}/5)</Text>
+            {photos.length < 5 && (
+              <TouchableOpacity onPress={takePhoto} style={styles.photoButtonSmall}>
+                <MaterialCommunityIcons name="camera" size={20} color="#1E90FF" />
+                <Text style={styles.photoButtonText}>Adicionar</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+          {photos.length > 0 ? (
+            <View style={styles.photoGrid}>
+              {photos.map((photo, index) => (
+                <View key={`${photo}-${index}`} style={styles.photoWrapper}>
+                  <Image source={{ uri: photo }} style={styles.photo} />
+                  <TouchableOpacity
+                    style={styles.removePhotoButton}
+                    onPress={() => setPhotos(photos.filter((_, i) => i !== index))}
+                  >
+                    <MaterialCommunityIcons name="close-circle" size={24} color="#ff4444" />
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+          ) : (
+            <View style={styles.emptyPhotoContainer}>
+              <MaterialCommunityIcons name="camera-off" size={48} color="#ccc" />
+              <Text style={styles.noPhotoText}>Nenhuma foto registrada</Text>
+              <TouchableOpacity onPress={takePhoto} style={styles.photoButton}>
+                <MaterialCommunityIcons name="camera" size={20} color="#fff" />
+                <Text style={styles.buttonText}>Tirar Foto</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </Card.Content>
+      </Card>
 
+      {/* Botão Finalizar */}
       <TouchableOpacity onPress={finalizarAnalise} style={styles.finalizeButton}>
+        <MaterialCommunityIcons name="check-circle" size={24} color="#fff" />
         <Text style={styles.buttonText}>Finalizar Análise</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }

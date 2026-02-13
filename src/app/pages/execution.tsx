@@ -1,5 +1,6 @@
 import * as React from "react";
 import { View, Text, Alert, Image, FlatList, TouchableOpacity, ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput, RadioButton, Checkbox, Card, Divider } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
@@ -7,6 +8,7 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 
 import { styles } from "../../styles/execution.styles";
 import { globalStyles } from "../../styles/globalStyles";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Execution() {
   const [photos, setPhotos] = React.useState<string[]>([]);
@@ -78,12 +80,15 @@ export default function Execution() {
     });
   };
 
+  const insets = useSafeAreaInsets();
+
   return (
-    <ScrollView 
-      style={globalStyles.container}
-      contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
-    >
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView 
+        style={globalStyles.container}
+        contentContainerStyle={[styles.scrollContent, { paddingBottom: insets.bottom + 24 }]}
+        showsVerticalScrollIndicator={false}
+      >
       {/* Card de Informações da Coleta */}
       <Card style={styles.infoCard} elevation={2}>
         <Card.Content>
@@ -238,11 +243,14 @@ export default function Execution() {
         </Card.Content>
       </Card>
 
-      {/* Botão Finalizar */}
-      <TouchableOpacity onPress={finalizarColeta} style={styles.finalizeButton}>
-        <MaterialCommunityIcons name="check-circle" size={24} color="#fff" />
-        <Text style={styles.buttonText}>Finalizar Coleta</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        {/* Botão Finalizar dentro do scroll para maior intuitividade */}
+        <View style={{ height: 12 }} />
+        <TouchableOpacity onPress={finalizarColeta} style={[styles.finalizeButton, { alignSelf: 'center' }]}>
+          <MaterialCommunityIcons name="check-circle" size={24} color="#fff" />
+          <Text style={styles.buttonText}>Finalizar Coleta</Text>
+        </TouchableOpacity>
+
+      </ScrollView>
+    </SafeAreaView>
   );
 }

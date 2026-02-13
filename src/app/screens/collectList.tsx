@@ -4,8 +4,10 @@ import { Button, Card, Badge } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 
-import { styles } from "../../styles/collectList.style";
+import { styles } from "../../styles/collectList.styles";
 import { globalStyles } from "../../styles/globalStyles";
+import { useContext } from "react";
+import { CollectsContext } from "../../contexts/CollectsContext";
 
 type Coleta = {
   id: string;
@@ -24,29 +26,24 @@ export default function CollectList() {
     finalizadas ? finalizadas.split(",") : []
   );
 
-  const [coletas, setColetas] = React.useState<Coleta[]>([]);
+  const collectsCtx = useContext(CollectsContext);
+  const [coletas, setColetas] = React.useState<Coleta[]>(collectsCtx.coletas);
   const [loading, setLoading] = React.useState(true);
   const [isSyncing, setIsSyncing] = React.useState(false);
 
   React.useEffect(() => {
-    // Simula carregamento das coletas com delay
-    setTimeout(() => {
-      const fetchedColetas: Coleta[] = [
-        { id: "08679", numero: "08679", local: "Aquidauana", endereco: "Rua 1", pontoColeta: "PTA-001", manancial: "Rio A", status: "Pendente" },
-        { id: "08680", numero: "08680", local: "Campo Grande", endereco: "Rua 2", pontoColeta: "PTA-002", manancial: "Córrego B", status: "Pendente" },
-        // ... outras coletas
-      ];
+    // subscribe to context changes
+    setColetas(collectsCtx.coletas);
+  }, [collectsCtx.coletas]);
 
-      const coletasAtualizadas = fetchedColetas.map((coleta) =>
-        finalizadasIds.includes(coleta.id)
-          ? { ...coleta, status: "Finalizada" }
-          : coleta
-      );
-
-      setColetas(coletasAtualizadas);
+  React.useEffect(() => {
+    // Simula carregamento das coletas
+    const timer = setTimeout(() => {
       setLoading(false);
     }, 1500);
-  }, [finalizadasIds]);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleItemPress = (item: Coleta) => {
     Alert.alert("Detalhes", `Deseja iniciar a coleta ${item.numero}?`, [
@@ -103,7 +100,7 @@ export default function CollectList() {
     const getStatusColor = () => {
       if (isEnviado) return "#B0B0B0";
       if (isFinalizada) return "#4CAF50";
-      return "#FF9800";
+      return "#1E90FF";
     };
 
     const getStatusIcon = () => {
@@ -181,33 +178,33 @@ export default function CollectList() {
         renderItem={renderItem}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
+        ListHeaderComponent={<View style={{ height: 24 }} />}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <MaterialCommunityIcons name="water-pump-off" size={64} color="#ccc" />
             <Text style={styles.emptyText}>Nenhuma coleta disponível</Text>
           </View>
         }
-        ListFooterComponent={() => (
-          <View style={styles.footerContainer}>
-            <Button
-              onPress={handleEnviarColetas}
-              disabled={isSyncing || coletasFinalizadas === 0}
-              mode="contained"
-              style={[
-                styles.syncButton,
-                { 
-                  backgroundColor: isSyncing || coletasFinalizadas === 0 ? "#A9A9A9" : "#1E90FF",
-                  opacity: isSyncing || coletasFinalizadas === 0 ? 0.6 : 1
-                }
-              ]}
-              labelStyle={styles.syncButtonLabel}
-              icon={isSyncing ? () => <ActivityIndicator color="#fff" size="small" /> : "cloud-upload"}
-            >
-              {isSyncing ? "Sincronizando..." : "Sincronizar Coletas"}
-            </Button>
-          </View>
-        )}
       />
+
+      <View style={styles.footerContainer}>
+        <Button
+          onPress={handleEnviarColetas}
+          disabled={isSyncing || coletasFinalizadas === 0}
+          mode="contained"
+          style={[
+            styles.syncButton,
+            { 
+              backgroundColor: isSyncing || coletasFinalizadas === 0 ? "#A9A9A9" : "#1E90FF",
+              opacity: isSyncing || coletasFinalizadas === 0 ? 0.6 : 1
+            }
+          ]}
+          labelStyle={styles.syncButtonLabel}
+          icon={isSyncing ? () => <ActivityIndicator color="#fff" size="small" /> : "cloud-upload"}
+        >
+          {isSyncing ? "Sincronizando..." : "Sincronizar Coletas"}
+        </Button>
+      </View>
     </View>
   );
 }

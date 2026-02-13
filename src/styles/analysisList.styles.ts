@@ -1,9 +1,8 @@
-// src/screens/CollectList.styles.ts
-
 import { StyleSheet } from "react-native";
 import { colors } from "./globalStyles";
 
 export const styles = StyleSheet.create({
+  // Apenas as chaves usadas por AnalysisList
   card: {
     marginBottom: 12,
     borderRadius: 12,
@@ -47,6 +46,7 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   listContent: {
+    paddingTop: 16,
     paddingBottom: 16,
   },
   summaryContainer: {
@@ -86,21 +86,5 @@ export const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "bold",
-  },
-  finalizedCard: {
-    backgroundColor: colors.success,
-  },
-  pendingCard: {
-    backgroundColor: colors.secondary,
-  },
-  loadingText: {
-    marginTop: 15,
-    fontSize: 16,
-    color: colors.primary,
-  },
-  errorText: {
-    color: colors.error,
-    fontSize: 16,
-    textAlign: "center",
   },
 });

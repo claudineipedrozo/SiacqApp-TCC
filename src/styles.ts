@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
       alignSelf: "center"
     },
     input: {
-      height: 40,
+      height: 50,
       width: 350,
       marginBottom: 36,
       alignSelf: "center",
@@ -34,13 +34,15 @@ export const styles = StyleSheet.create({
     button: {
       marginTop: 80,
       width: 250,
-      height: 44,
+      height: 60,
       alignSelf: "center",      
       borderRadius: 8,
       marginBottom: 36,
+      justifyContent: "center",
+      alignItems: "center",
     },
     buttonLabel: {
-      fontSize: 16, 
+      fontSize: 26, 
       fontWeight: "bold",
       textAlign: "center", 
     },

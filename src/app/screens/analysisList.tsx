@@ -4,7 +4,7 @@ import { Card, Button, Badge } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 
-import { styles } from "../../styles/analysis.styles";
+import { styles } from "../../styles/analysisList.styles";
 import { globalStyles } from "../../styles/globalStyles";
 
 type Coleta = {
@@ -33,7 +33,7 @@ const listaDeColetas: Coleta[] = [
     local: "Campo Grande - MS",
     endereco: "Rua Bahia, 200",
     pontoColeta: "PTA-002",
-    manancial: "Córrego Prosa",
+    manancial: "C?rrego Prosa",
     status: "Pendente",
   },
   // mais coletas...
@@ -44,6 +44,7 @@ export default function AnalysisList() {
   const { finalizadaId } = useLocalSearchParams<{ finalizadaId?: string }>();
 
   const [coletas, setColetas] = React.useState<Coleta[]>(listaDeColetas);
+  const [loading, setLoading] = React.useState(true);
   const [isSyncing, setIsSyncing] = React.useState(false);
 
   React.useEffect(() => {
@@ -55,6 +56,15 @@ export default function AnalysisList() {
       );
     }
   }, [finalizadaId]);
+
+  React.useEffect(() => {
+    // Simula carregamento das análises (igual ao das coletas)
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleItemPress = (item: Coleta) => {
     Alert.alert(
@@ -96,7 +106,7 @@ export default function AnalysisList() {
       );
 
       setIsSyncing(false);
-      Alert.alert("Sucesso", "Análises sincronizadas com sucesso!");
+      Alert.alert("Sucesso", "An?lises sincronizadas com sucesso!");
     }, 2000);
   };
 
@@ -107,7 +117,7 @@ export default function AnalysisList() {
     const getStatusColor = () => {
       if (isEnviado) return "#B0B0B0";
       if (isFinalizada) return "#4CAF50";
-      return "#FF9800";
+      return "#1E90FF";
     };
 
     const getStatusIcon = () => {
@@ -169,6 +179,17 @@ export default function AnalysisList() {
 
   const analisesFinalizadas = coletas.filter((c) => c.status === "Finalizada").length;
 
+  if (loading) {
+    return (
+      <View style={globalStyles.centered}>
+        <ActivityIndicator size="large" color="#1E90FF" />
+        <Text style={{ marginTop: 12, fontSize: 16, color: "#1E90FF" }}>
+          Carregando análises...
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <View style={globalStyles.container}>
       {isSyncing && (
@@ -196,6 +217,7 @@ export default function AnalysisList() {
             renderItem={renderItem}
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator={false}
+            ListHeaderComponent={<View style={{ height: 24 }} />}
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
                 <MaterialCommunityIcons name="test-tube-off" size={64} color="#ccc" />

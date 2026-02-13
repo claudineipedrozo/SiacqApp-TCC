@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import { TextInput, Card, Divider } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -16,6 +17,7 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 
 import { styles } from "../../styles/analysis.styles";
 import { globalStyles } from "../../styles/globalStyles";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Analysis() {
   const [photos, setPhotos] = React.useState<string[]>([]);
@@ -94,11 +96,8 @@ export default function Analysis() {
   ];
 
   return (
-    <ScrollView 
-      style={styles.container}
-      contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
-    >
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
       {/* Card de Informações */}
       <Card style={styles.infoCard} elevation={2}>
         <Card.Content>
@@ -166,11 +165,13 @@ export default function Analysis() {
         </Card.Content>
       </Card>
 
-      {/* Botão Finalizar */}
-      <TouchableOpacity onPress={finalizarAnalise} style={styles.finalizeButton}>
-        <MaterialCommunityIcons name="check-circle" size={24} color="#fff" />
-        <Text style={styles.buttonText}>Finalizar Análise</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        {/* Botão Finalizar (dentro do conteúdo) */}
+        <View style={{ height: 8 }} />
+        <TouchableOpacity onPress={finalizarAnalise} style={[styles.finalizeButton, { alignSelf: 'center' }]}>
+          <MaterialCommunityIcons name="check-circle" size={20} color="#fff" />
+          <Text style={styles.buttonText}>Finalizar Análise</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }

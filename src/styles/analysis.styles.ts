@@ -1,18 +1,16 @@
 import { StyleSheet } from "react-native";
-import { colors } from "./globalStyles";  
+import { colors } from "./globalStyles";
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 20,
+    paddingTop: 46,
     backgroundColor: "#f5f5f5",
   },
-  scrollContent: {
-    paddingBottom: 24,
-  },
   infoCard: {
-    marginBottom: 16,
-    borderRadius: 12,
+    marginBottom: 8,
+    borderRadius: 10,
   },
   infoHeader: {
     flexDirection: "row",
@@ -25,17 +23,17 @@ export const styles = StyleSheet.create({
     marginLeft: 12,
   },
   sectionCard: {
-    marginBottom: 16,
-    borderRadius: 12,
+    marginBottom: 8,
+    borderRadius: 10,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
     color: "#333",
-    marginBottom: 16,
+    marginBottom: 8,
   },
   input: {
-    marginBottom: 12,
+    marginBottom: 8,
   },
   photoHeader: {
     flexDirection: "row",
@@ -61,14 +59,14 @@ export const styles = StyleSheet.create({
   photoGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 12,
+    gap: 8,
   },
   photoWrapper: {
     position: "relative",
   },
   photo: {
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: "#ccc",
@@ -82,142 +80,42 @@ export const styles = StyleSheet.create({
   },
   emptyPhotoContainer: {
     alignItems: "center",
-    paddingVertical: 24,
+    paddingVertical: 12,
   },
   photoButton: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
-    marginTop: 16,
-    height: 48,
+    gap: 6,
+    marginTop: 8,
+    height: 40,
     borderRadius: 8,
     justifyContent: "center",
     backgroundColor: colors.primary,
   },
   noPhotoText: {
-    marginTop: 12,
-    marginBottom: 8,
+    marginTop: 8,
+    marginBottom: 6,
     color: "#999",
-    fontSize: 14,
+    fontSize: 13,
   },
   finalizeButton: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    marginTop: 8,
-    height: 56,
-    borderRadius: 12,
+    height: 48,
+    width: "84%",
+    borderRadius: 10,
     justifyContent: "center",
     backgroundColor: colors.primary,
-    elevation: 3,
+    elevation: 6,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.28,
+    shadowRadius: 4,
   },
   buttonText: {
     color: "#fff",
-    fontWeight: "bold",
-    fontSize: 18,
-  },
-  // Estilos para a lista de análises
-  card: {
-    marginBottom: 12,
-    borderRadius: 12,
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#e0e0e0",
-  },
-  cardHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  cardTitleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-  cardIcon: {
-    marginRight: 8,
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#333",
-  },
-  badge: {
-    marginLeft: 8,
-  },
-  cardInfo: {
-    gap: 8,
-  },
-  infoRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  infoText: {
-    fontSize: 14,
-    color: "#666",
-    flex: 1,
-  },
-  listContent: {
-    paddingBottom: 16,
-  },
-  summaryContainer: {
-    backgroundColor: "#E3F2FD",
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 16,
-    borderLeftWidth: 4,
-    borderLeftColor: colors.primary,
-  },
-  summaryText: {
-    fontSize: 14,
-    color: "#1976D2",
-    fontWeight: "600",
-  },
-  emptyContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 60,
-  },
-  emptyText: {
+    fontWeight: "700",
     fontSize: 16,
-    color: "#999",
-    marginTop: 16,
-    textAlign: "center",
-  },
-  footerContainer: {
-    marginTop: 20,
-    marginBottom: 16,
-  },
-  syncButton: {
-    height: 50,
-    borderRadius: 8,
-    justifyContent: "center",
-  },
-  syncButtonLabel: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  textInput: {
-    marginTop: 8,
-  },
-  photoList: {
-    marginTop: 10,
-  },
-  pendenteCard: {
-    backgroundColor: "#DCDCDC",
-  },
-  enviadoCard: {
-    backgroundColor: "#d1f7c4",
-  },
-  coletaNumero: {
-    fontWeight: "bold",
-    marginBottom: 4,
   },
 });

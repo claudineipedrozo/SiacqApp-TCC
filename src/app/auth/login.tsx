@@ -61,6 +61,7 @@ export default function Index() {
         textColor="white"        
         style={styles.button}
         labelStyle={styles.buttonLabel}
+        contentStyle={{ justifyContent: "center", height: 60 }}
       >
         LOGIN
       </Button>

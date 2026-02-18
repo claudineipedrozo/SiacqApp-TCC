@@ -57,16 +57,7 @@ export default function Layout() {
           ),
         }}
       />
-
-      <Tabs.Screen
-        name="analysisList"
-        options={{
-          title: "Análises",
-          tabBarIcon: ({ color, size }) => (
-            <Fontisto name="laboratory" size={size || 24} color={color} />
-          ),
-        }}
-      />
+      {/* Aba 'Análises' removida — mantém somente funções do coletor */}
     </Tabs>
     </CollectsProvider>
   );

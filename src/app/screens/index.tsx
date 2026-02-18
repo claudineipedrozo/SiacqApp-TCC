@@ -1,35 +1,46 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, Alert, ScrollView, Modal } from "react-native";
-import React, { useState } from "react";
-import { router } from "expo-router";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
-import CollectCreate from "../../components/collectCreate";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Alert,
+  ScrollView,
+  Modal,
+} from "react-native"
+import React, { useState } from "react"
+import { router } from "expo-router"
+import { MaterialCommunityIcons } from "@expo/vector-icons"
+import { SafeAreaView } from "react-native-safe-area-context"
+import CollectCreate from "../../components/collectCreate"
 
 export default function Index() {
-  const handleLogout = () => router.replace("/auth/login");
+  const handleLogout = () => router.replace("/auth/login")
 
-  const pendingColetas = 3;
-  const analisesFinalizadas = 2;
-  const prontoSync = 1;
-  const analisesPendentes = 4;
+  const pendingColetas = 3
+  const pendingSync = 1
 
-  const [loadedColetas, setLoadedColetas] = useState(0);
-  const [loadedAnalises, setLoadedAnalises] = useState(0);
-  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [loadedColetas, setLoadedColetas] = useState(0)
+  const [showCreateModal, setShowCreateModal] = useState(false)
 
   const handleLoadForExecution = () => {
     // For now, simulate loading by using pending counts
-    setLoadedColetas(pendingColetas);
-    setLoadedAnalises(analisesPendentes);
-    Alert.alert("Carregamento", `Carregadas ${pendingColetas} coletas e ${analisesPendentes} análises para execução.`);
-  };
+    setLoadedColetas(pendingColetas)
+    Alert.alert(
+      "Carregamento",
+      `Carregadas ${pendingColetas} coletas para execução.`,
+    )
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.headerCard}>
           <View style={styles.headerLeft}>
-            <Image source={{ uri: "https://github.com/claudineipedrozo.png" }} style={styles.img} />
+            <Image
+              source={{ uri: "https://github.com/claudineipedrozo.png" }}
+              style={styles.img}
+            />
             <View style={styles.user}>
               <Text style={styles.hi}>Olá,</Text>
               <Text style={styles.username}>Claudinei Pedrozo</Text>
@@ -47,56 +58,83 @@ export default function Index() {
           </View>
         </View>
 
-        <View style={styles.kpisRow}>
-          <View style={styles.kpiBig}>
-            <MaterialCommunityIcons name="clipboard-list" size={28} color="#1E90FF" />
+        <View style={styles.kpisRowSingle}>
+          <View style={styles.kpiBigSingle}>
+            <MaterialCommunityIcons
+              name="clipboard-list"
+              size={28}
+              color="#1E90FF"
+            />
             <Text style={styles.kpiValueBig}>{pendingColetas}</Text>
             <Text style={styles.kpiLabel}>Coletas Pendentes</Text>
-          </View>
-
-          <View style={styles.kpiBig}>
-            <MaterialCommunityIcons name="test-tube" size={28} color="#FF9800" />
-            <Text style={styles.kpiValueBig}>{analisesPendentes}</Text>
-            <Text style={styles.kpiLabel}>Análises Pendentes</Text>
           </View>
         </View>
 
         {/* shortcuts removed (Sincronizar, Análises). Nova Coleta será mostrada abaixo das atividades */}
 
         <View style={styles.activities}>
-          <Text style={styles.activitiesTitle}>Atividades recentes{loadedColetas > 0 ? ` • ${loadedColetas} carregadas` : ''}</Text>
+          <Text style={styles.activitiesTitle}>
+            Atividades recentes
+            {loadedColetas > 0 ? ` • ${loadedColetas} carregadas` : ""}
+          </Text>
 
           {loadedColetas > 0 && (
             <View style={styles.activityItem}>
-              <Text style={styles.activityText}>Coletas carregadas para execução</Text>
+              <Text style={styles.activityText}>
+                Coletas carregadas para execução
+              </Text>
               <Text style={styles.activityTime}>{loadedColetas}</Text>
             </View>
           )}
 
-          <View style={styles.activityItem}><Text style={styles.activityText}>Coleta 08679 iniciada</Text><Text style={styles.activityTime}>2h</Text></View>
-          <View style={styles.activityItem}><Text style={styles.activityText}>Análise 08680 finalizada</Text><Text style={styles.activityTime}>5h</Text></View>
-          <View style={styles.activityItem}><Text style={styles.activityText}>Sincronização concluída</Text><Text style={styles.activityTime}>1d</Text></View>
+          <View style={styles.activityItem}>
+            <Text style={styles.activityText}>Coleta 08679 iniciada</Text>
+            <Text style={styles.activityTime}>2h</Text>
+          </View>
+          <View style={styles.activityItem}>
+            <Text style={styles.activityText}>Coleta 08680 finalizada</Text>
+            <Text style={styles.activityTime}>5h</Text>
+          </View>
+          <View style={styles.activityItem}>
+            <Text style={styles.activityText}>Sincronização concluída</Text>
+            <Text style={styles.activityTime}>1d</Text>
+          </View>
         </View>
 
         <View style={styles.bottomActionWrapper}>
-          <TouchableOpacity style={styles.loadButton} onPress={handleLoadForExecution} activeOpacity={0.8}>
-            <MaterialCommunityIcons name="database-import" size={18} color="#fff" />
-            <Text style={styles.loadLabel}>Carregar Coletas/ Análises</Text>
+          <TouchableOpacity
+            style={styles.loadButton}
+            onPress={handleLoadForExecution}
+            activeOpacity={0.8}
+          >
+            <MaterialCommunityIcons
+              name="database-import"
+              size={18}
+              color="#fff"
+            />
+            <Text style={styles.loadLabel}>Carregar Coletas</Text>
           </TouchableOpacity>
 
           <View style={{ height: 12 }} />
 
-          <TouchableOpacity style={styles.newCollectButton} onPress={() => setShowCreateModal(true)}>
+          <TouchableOpacity
+            style={styles.newCollectButton}
+            onPress={() => setShowCreateModal(true)}
+          >
             <MaterialCommunityIcons name="plus-box" size={20} color="#fff" />
             <Text style={styles.newCollectLabel}>Nova Coleta</Text>
           </TouchableOpacity>
         </View>
-        <Modal visible={showCreateModal} animationType="slide" presentationStyle="fullScreen">
+        <Modal
+          visible={showCreateModal}
+          animationType="slide"
+          presentationStyle="fullScreen"
+        >
           <CollectCreate onClose={() => setShowCreateModal(false)} />
         </Modal>
       </ScrollView>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -235,7 +273,7 @@ const styles = StyleSheet.create({
     marginTop: 28,
   },
   kpiBig: {
-    width: '48%',
+    width: "48%",
     backgroundColor: "#fff",
     marginHorizontal: 0,
     borderRadius: 10,
@@ -344,4 +382,4 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginLeft: 8,
   },
-});
+})

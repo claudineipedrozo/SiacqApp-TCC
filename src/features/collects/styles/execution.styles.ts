@@ -1,7 +1,7 @@
 // src/screens/Execution.styles.ts
 
-import { StyleSheet } from "react-native";
-import { colors } from "./globalStyles";
+import { StyleSheet } from "react-native"
+import { colors } from "@/styles/globalStyles"
 
 export const styles = StyleSheet.create({
   scrollContent: {
@@ -140,7 +140,7 @@ export const styles = StyleSheet.create({
     color: "#999",
     fontSize: 14,
   },
-  
+
   labelText: {
     fontSize: 16,
     fontWeight: "bold",
@@ -180,4 +180,4 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 18,
   },
-});
+})

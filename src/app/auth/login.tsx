@@ -1,25 +1,24 @@
-import * as React from "react";
-import { View, Text, Image, Alert } from "react-native";
-import { TextInput, Button } from "react-native-paper";
-import { router } from "expo-router";
+import * as React from "react"
+import { View, Text, Image, Alert } from "react-native"
+import { TextInput, Button } from "react-native-paper"
+import { router } from "expo-router"
 
+import { styles } from "../../styles"
+import Logo from "../../../assets/images/logo.png"
 
-import { styles } from "../../styles";
-import Logo from "../../../assets/images/logo.png";  
+export default function Index() {
+  const [text, setText] = React.useState("")
+  const [lock, setLock] = React.useState("")
+  const [showPassword, setShowPassword] = React.useState(false)
 
-export default function Index() {  
-
-  const [text, setText] = React.useState("");
-  const [lock, setLock] = React.useState("");
-  const [showPassword, setShowPassword] = React.useState(false);
-  
-  const initialPage = () => { 
-    if (text === "" || lock === ""){
+  const initialPage = () => {
+    if (text === "" || lock === "") {
       Alert.alert("Favor digitar o usuário e senha!")
-      return;
+      return
     }
-    
-    router.navigate("../screens") }
+
+    router.navigate("../screens")
+  }
 
   return (
     <View style={styles.container}>
@@ -51,14 +50,14 @@ export default function Index() {
           />
         }
         contentStyle={styles.inputContent}
-        secureTextEntry={!showPassword} 
+        secureTextEntry={!showPassword}
       />
 
       <Button
         mode="contained"
-        onPress={ initialPage }
+        onPress={initialPage}
         buttonColor="#2D91B6"
-        textColor="white"        
+        textColor="white"
         style={styles.button}
         labelStyle={styles.buttonLabel}
         contentStyle={{ justifyContent: "center", height: 60 }}
@@ -66,7 +65,5 @@ export default function Index() {
         LOGIN
       </Button>
     </View>
-  );
+  )
 }
-
-

@@ -1,6 +1,6 @@
-# SiacqApp - TCC
+# RNLearning
 
-Este repositório contém o código-fonte do trabalho de conclusão de curso com o objetivo de desenvolver uma aplicação mobile para auxiliar colaboradores da empresa de saneamento (SANESUL) a realizar coletas de água e análises laboratoriais das coletas. O objetivo principal deste TCC é fornecer uma ferramenta digital que simplifique e otimize o processo de coleta e análise de amostras de água. A aplicação permite que os colaboradores registrem dados das coletas em campo e enviem para análise laboratorial, garantindo maior precisão, agilidade e rastreabilidade das informações.
+Este repositório foi criado com o objetivo de aprender a desenvolver uma aplicação mobile, o objetivo principal deste aprendizado é fornecer uma base para o desenvolvimento do Trabalho de Conclusão de Curso. 
 
 # Tecnologias Utilizadas
 Este projeto foi desenvolvido utilizando as seguintes tecnologias:
@@ -43,10 +43,4 @@ npx expo start
 npm start
 
 ```
-Após executar o comando, uma janela do navegador será aberta (Expo Dev Tools) e um QR Code aparecerá no terminal.
-
-Para testar no seu smartphone: Use o aplicativo Expo Go para escanear o QR Code que aparece no terminal ou na janela do navegador. A aplicação será carregada no seu dispositivo.
-Para testar em um emulador/simulador:
-Se você tiver um emulador Android configurado no Android Studio e rodando, pressione a no terminal onde o Expo está rodando.
-Se você tiver um simulador iOS configurado no Xcode (apenas em macOS) e rodando, pressione i no terminal onde o Expo está rodando.
 

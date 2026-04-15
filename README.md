@@ -20,13 +20,13 @@ npm
 Abra o seu terminal ou prompt de comando e execute:
 
 ```bash
-git clone https://github.com/claudineipedrozo/SiacqApp-TCC.git 
+git clone https://github.com/claudineipedrozo/RNLearning.git 
 
 ```
 2. Navegue até o Diretório do Projeto:
 
 ```bash
-cd SiacqApp-TCC 
+cd RNLearning 
 
 ```
 3. Instale as Dependências:
